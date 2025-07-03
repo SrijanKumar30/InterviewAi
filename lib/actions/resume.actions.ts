@@ -4,7 +4,7 @@ import { projects, resumes } from '@/config/database/schema'; // Adjust path to 
 export async function saveResume(resumeData: ResumeData,userId:string): Promise<any> {
     try {
       // Convert skills array to PostgreSQL array format
-      const skillsArray = resumeData.skills.join(',');
+      // const skillsArray = resumeData.skills.join(',');
   
       const savedResume = await db.insert(resumes).values({
         name: resumeData.name,
@@ -14,11 +14,16 @@ export async function saveResume(resumeData: ResumeData,userId:string): Promise<
         address: resumeData.address,
         education: resumeData.education,
         experience: resumeData.experience,
-        skills: `{${skillsArray}}`, 
+        skills: resumeData.skills,
+        // skills: `{${skillsArray}}`, 
         summary: resumeData.summary,
         certifications: resumeData.certifications,
       }).returning(); 
 
+      if (!savedResume.length) {
+        throw new Error('Resume insert returned empty');
+      }
+      console.log(savedResume);
       const projectPromises = resumeData.projects.map(project =>
         db.insert(projects).values({
           resumeId: savedResume[0].id,
@@ -31,6 +36,9 @@ export async function saveResume(resumeData: ResumeData,userId:string): Promise<
       return savedResume[0];
     } catch (error) {
       console.error('Error saving resume:', error);
+      if (error instanceof Error) {
+        throw new Error(`Failed to save resume: ${error.message}`);
+      }
       throw new Error('Failed to save resume');
     }
   }

@@ -12,6 +12,8 @@ import { saveQuestions } from '@/lib/actions/question.actions';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { LoaderCircle } from 'lucide-react';
+import { db } from '@/config/database';
+import { users } from '@/config/database/schema';
 
 
 const Form: React.FC<FormProps> = ({ resumeData }) => {
@@ -115,17 +117,34 @@ const Form: React.FC<FormProps> = ({ resumeData }) => {
     }));
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    
+
     e.preventDefault();
     if (numberOfQuestions > 10) {
       alert('The maximum number of questions is 10.');
       return;
     }  
+    if (!userId) {
+      alert('User not authenticated');
+      return;
+    }
     setIsLoading(true);
-    const savedResume = await saveResume(formData,userId || ""); 
+    // Make sure the user exists in the DB
+    await db.insert(users)
+    .values({
+      id: userId,
+      email: user?.primaryEmailAddress?.emailAddress || '',
+    })
+    .onConflictDoNothing(); // prevent duplicates
+    
+    const savedResume = await saveResume(formData, userId);
+    // console.log(savedResume);
     const resumeId = savedResume.id;
     const sessionId = uuidv4();
     //console.log('Resume saved with ID:', resumeId);
+    const resumeSummary = await AichatSession.sendMessage(`Please summarise this resume data in words in not more than 60 words, do not exaggerate in description keep it information dense but in short, : ${formData}`)
     const resumeDetails = `
     Name: ${formData.name}
     Email: ${formData.email}
@@ -134,7 +153,7 @@ const Form: React.FC<FormProps> = ({ resumeData }) => {
     Education: ${formData.education}
     Experience: ${formData.experience}
     Skills: ${formData.skills.join(', ')}
-    Summary: ${formData.summary}
+    Summary: ${resumeSummary}
     Certifications: ${formData.certifications}
     Projects: ${formData.projects.map(project => `Title: ${project.title}, Description: ${project.description}`).join('; ')}
   `;

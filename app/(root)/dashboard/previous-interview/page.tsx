@@ -52,7 +52,12 @@ const PreviousInterview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {interviews.map((interview, index) => {
           // Split the skills string into an array if needed
-          const skillsArray = interview.resumeSkills ? interview.resumeSkills.split(',') : [];
+          const skillsArray = Array.isArray(interview.resumeSkills)
+            ? interview.resumeSkills
+            : typeof interview.resumeSkills === 'string'
+            ? interview.resumeSkills.split(',')
+            : [];
+
           // Slice to get only the first 5 skills
           const limitedSkills = skillsArray.slice(0, 5);
 

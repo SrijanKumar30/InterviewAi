@@ -27,7 +27,7 @@ export async function saveQuestions(
     resumeId,
     sessionId,
     userId,
-    questions: questionsArray,
+    questionsData: questionsArray,
     difficulty,
   }).returning();
 
@@ -48,7 +48,7 @@ export async function getQuestionsBySessionId(sessionId: string,userId:string){
     id: question.id,
     userId: question.userId,
     resumeId: question.resumeId,
-    questions: question.questions,
+    questions: question.questionsData,
     difficulty: question.difficulty,
     status: question.status,
     score: question.score,

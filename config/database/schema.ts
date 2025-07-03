@@ -18,7 +18,9 @@ export const resumes = pgTable('resumes', {
   address: text('address'),
   education: text('education'),
   experience: text('experience'),
-  skills: text('skills[]').default('{}'),
+  // skills: text('skills[]').default('{}'),
+  // skills: text('skills').array().default([]),
+  skills: text('skills').array(),
   summary: text('summary'),
   certifications: text('certifications'),
   createdAt: timestamp('created_at').defaultNow(),
@@ -38,7 +40,7 @@ export const questions = pgTable('questions', {
   id: serial('id').primaryKey(),
   userId: text('user_id').references(() => users.id),
   resumeId: integer('resume_id').references(() => resumes.id),
-  questions: json('questions'), // Use json type to store array of questions
+  questionsData: json('questions_data'), // Use json type to store array of questions
   sessionId: text('session_id'),
   difficulty: text('difficulty'),
   status: text('status').default('None'),

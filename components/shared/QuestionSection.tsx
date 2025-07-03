@@ -52,7 +52,9 @@ const QuestionSection = ({ params, activeQuestion, setActiveQuestion, setQuestio
       setActiveQuestion(activeQuestion - 1);
     }
   };
-
+  if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
+    return <p className='text-center my-10 text-gray-500'>Loading questions...</p>;
+  }
   return (
     <div className='p-5 border rounded-lg my-10 gap-5'>
       <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-5'>
@@ -67,11 +69,27 @@ const QuestionSection = ({ params, activeQuestion, setActiveQuestion, setQuestio
           </div>
         ))}
       </div>
+      {mockInterviewQuestions.length > 0 && typeof activeQuestion === 'number' && mockInterviewQuestions[activeQuestion] ? (
       <div className='flex items-center my-5'>
-        <h2 className='text-md md:text-lg flex-grow'>{mockInterviewQuestions[activeQuestion]?.question}</h2>
+        <h2 className='text-md md:text-lg flex-grow'>
+          {mockInterviewQuestions[activeQuestion]?.question}
+        </h2>
       </div>
+      ) : (
+        <div className='flex items-center my-5'>
+        <h2 className='text-md md:text-lg flex-grow text-gray-500 italic'>
+          Loading question...
+        </h2>
+      </div>
+    )}
 
-      <Volume2 className={`cursor-pointer ${isSpeaking && 'animate-bounce'}`} onClick={() => textToSpeech(mockInterviewQuestions[activeQuestion]?.question)} />
+
+      {mockInterviewQuestions[activeQuestion]?.question && (
+  <Volume2
+    className={`cursor-pointer ${isSpeaking && 'animate-bounce'}`}
+    onClick={() => textToSpeech(mockInterviewQuestions[activeQuestion]?.question)}
+  />
+)}
 
       <div className='border rounded-lg p-5 bg-blue-100 mt-20 my-8'>
         <h2 className='flex gap-2 items-center text-blue-900'>
