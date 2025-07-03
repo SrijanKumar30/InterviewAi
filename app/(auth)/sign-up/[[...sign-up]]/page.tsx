@@ -17,10 +17,10 @@ export default function Page() {
         </div>
         <div className="pointer-events-none relative hidden h-screen select-none bg-black md:block md:w-1/2">
           <div className="absolute bottom-0 z-10 px-8 text-white opacity-100">
-            <p className="mb-8 text-3xl font-semibold leading-10">We work 10x faster than our competitors and stay consistent. While they're bogged down with technical debt, we're releasing new features.</p>
-            <p className="mb-4 text-3xl font-semibold">Naman Kumar Das</p>
-            <p className="">Founder, InterviewMentor AI</p>
-            <p className="mb-7 text-sm opacity-70">Online AI Interview</p>
+            <p className="mb-8 text-3xl font-semibold leading-10">"I think with practice, you can being whatever you want to be, and with a goal you can go in any direction that you want to go in."</p>
+            <p className="mb-4 text-3xl font-semibold">-Michael Phelps</p>
+            {/* <p className="">Founder, InterviewMentor AI</p>
+            <p className="mb-7 text-sm opacity-70">Online AI Interview</p> */}
           </div>
           <img className="-z-1 absolute top-0 h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1565301660306-29e08751cc53?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
         </div>
